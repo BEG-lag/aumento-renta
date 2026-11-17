@@ -175,6 +175,8 @@ Información, no asesoría. No constituye opinión legal; valida con un abogado 
 **Benjamín Esponda García**, abogado en la Ciudad de México que construye con IA.
 [pivotek.mx](https://pivotek.mx) · [Portafolio de IA](https://github.com/BEG-lag/portafolio-ia) · [GitHub](https://github.com/BEG-lag)
 
+Para abogados: [Con Criterio](https://concriterio.mx), kit de IA para la práctica legal en México (guía, plugins y skills de Claude Code, incluido arrendamiento).
+
 ## Licencia
 
 [MIT](LICENSE). Tipografías: JetBrains Mono, Inter y Cormorant Garamond (SIL Open Font License), incluidas vía Fontsource. Los valores de los índices son información pública oficial del INEGI y del Banco de México, tal como se publican en el Diario Oficial de la Federación.

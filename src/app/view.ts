@@ -716,6 +716,7 @@ export function renderFooter(root: HTMLElement, vm: ViewModel): void {
         ext(REPO_URL, t.footerCode, t),
         h('span', {}, `${t.footerBy} Benjamín Esponda García: `, ext('https://pivotek.mx', 'pivotek.mx', t), ' · ', ext('https://github.com/BEG-lag/portafolio-ia', t.footerPortfolio, t)),
       ),
+      h('p', { class: 'small' }, `${t.footerCc} `, ext('https://concriterio.mx', 'concriterio.mx', t)),
       h('p', { class: 'small muted', id: 'offline-status', role: 'status' }),
     ),
   );

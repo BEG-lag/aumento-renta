@@ -175,6 +175,8 @@ Information, not legal advice. This is not a legal opinion; check with a lawyer 
 **Benjamín Esponda García**, a lawyer in Mexico City who builds with AI.
 [pivotek.mx](https://pivotek.mx) · [AI portfolio](https://github.com/BEG-lag/portafolio-ia) · [GitHub](https://github.com/BEG-lag)
 
+For lawyers: [Con Criterio](https://concriterio.mx), an AI toolkit for legal practice in Mexico (guide, Claude Code plugins and skills, leases included).
+
 ## License
 
 [MIT](LICENSE). Fonts: JetBrains Mono, Inter and Cormorant Garamond (SIL Open Font License), self-hosted via Fontsource. Index values are public official information from INEGI and Banco de México as published in the Diario Oficial de la Federación.
