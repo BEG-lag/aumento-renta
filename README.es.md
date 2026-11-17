@@ -12,6 +12,13 @@
 
 <p align="center"><a href="README.md">English</a> · <b>Español</b></p>
 
+<!-- demo:start -->
+<p align="center">
+  <img src="assets/demo.gif" alt="Grabación de pantalla de la app en vivo: una renta de $12,000 desde el 2025-12-01 se actualiza con el INPC a $12,450.33, paso a paso con los valores del DOF, y se revisa una propuesta de 8% contra el tope de la CDMX." width="100%">
+</p>
+<p align="center"><sub>Grabación real de <a href="https://beg-lag.github.io/aumento-renta/">la app en vivo</a>. <a href="assets/demo.mp4">Versión MP4</a>.</sub></p>
+<!-- demo:end -->
+
 # aumento·renta
 
 **¿Cuánto puede subir tu renta?** Una pequeña app web instalable para México. Actualiza una renta (o cualquier cantidad) entre dos fechas con la inflación (el INPC que publica el INEGI) o con UDIS, muestra la cuenta paso a paso con los valores oficiales y el enlace a la nota del Diario Oficial de la Federación donde se publicó cada uno, revisa el tope legal de la Ciudad de México para vivienda y redacta un mensaje cordial y neutral para el arrendador o el inquilino.

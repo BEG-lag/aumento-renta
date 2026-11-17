@@ -12,6 +12,13 @@
 
 <p align="center"><b>English</b> · <a href="README.es.md">Español</a></p>
 
+<!-- demo:start -->
+<p align="center">
+  <img src="assets/demo.gif" alt="Screen recording of the live app: a $12,000 rent from 2025-12-01 is updated with the INPC to $12,450.33, step by step with the DOF values, and an 8% proposal is checked against Mexico City's cap." width="100%">
+</p>
+<p align="center"><sub>Real recording of <a href="https://beg-lag.github.io/aumento-renta/">the live app</a>. <a href="assets/demo.mp4">MP4 version</a>.</sub></p>
+<!-- demo:end -->
+
 # aumento·renta
 
 **How much can your rent go up?** A small installable web app for people in Mexico. It updates a rent (or any amount) between two dates with inflation (the INPC that INEGI publishes) or with UDIS, shows the math step by step with the official index values and a link to the Diario Oficial de la Federación issue where each one was published, checks Mexico City's legal cap for homes, and writes a polite, neutral message for the landlord or the tenant.
