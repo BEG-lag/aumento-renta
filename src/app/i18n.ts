@@ -211,6 +211,8 @@ const es = {
   footerBy: 'Hecho por',
   footerPortfolio: 'portafolio',
   offlineReady: 'Lista para usarse sin conexión.',
+  loadingUdis: 'Cargando las UDIS…',
+  udisFailed: 'No se pudieron cargar las UDIS (¿sin conexión?). Usamos el INPC; vuelve a intentarlo con conexión.',
 };
 
 export type Strings = typeof es;
@@ -418,6 +420,8 @@ const en: Strings = {
   footerBy: 'Made by',
   footerPortfolio: 'portfolio',
   offlineReady: 'Ready to use offline.',
+  loadingUdis: 'Loading UDIS…',
+  udisFailed: 'Could not load UDIS (offline?). Using the INPC; try again when online.',
 };
 
 export const STRINGS: Record<Lang, Strings> = { es, en };

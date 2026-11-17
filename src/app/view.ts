@@ -637,7 +637,7 @@ export function renderResult(root: HTMLElement, vm: ViewModel, handlers: Handler
   const { t } = vm;
   const r = vm.result;
   if (vm.loadingUdis) {
-    replaceChildren(root, h('section', { class: 'card empty' }, h('p', {}, '…')));
+    replaceChildren(root, h('section', { class: 'card empty', 'aria-busy': 'true' }, h('p', { class: 'muted' }, t.loadingUdis)));
     return;
   }
   if (!r) {

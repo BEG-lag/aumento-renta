@@ -93,11 +93,21 @@ function viewModel(): ViewModel {
 
 function ensureUdis(): void {
   if (udis || udisLoading) return;
-  udisLoading = import('../../data/udis.json').then((mod) => {
-    udis = new UdisSeries(mod.default as UdisData);
-    renderResultOnly();
-    renderFooter(footerRoot as HTMLElement, viewModel());
-  });
+  udisLoading = import('../../data/udis.json').then(
+    (mod) => {
+      udis = new UdisSeries(mod.default as UdisData);
+      renderResultOnly();
+      renderFooter(footerRoot as HTMLElement, viewModel());
+    },
+    () => {
+      // First visit while offline: the UDIS chunk is not cached yet. Fall back to the INPC.
+      udisLoading = null;
+      state = { ...state, index: 'inpc' };
+      renderAll();
+      const status = document.getElementById('offline-status');
+      if (status) status.textContent = STRINGS[state.lang].udisFailed;
+    },
+  );
 }
 
 let liveTimer: ReturnType<typeof setTimeout> | undefined;
