@@ -1,6 +1,6 @@
 {
   "name": "aumento-renta",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "How much can your rent go up? Updates a rent between two dates with Mexico's INPC (INEGI) or UDIS, shows the math with the official values, checks Mexico City's cap and writes the message. Offline PWA, no tracking.",
   "keywords": [
