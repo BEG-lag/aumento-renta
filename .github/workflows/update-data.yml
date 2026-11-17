@@ -1,0 +1,67 @@
+name: Update index data
+
+# Reads new INPC and UDIS values from the Diario Oficial de la Federación
+# through the public SIDOF API (no account or token) and commits them only
+# when a value changed. Then it runs the tests and redeploys the site.
+#
+# INEGI publishes the monthly INPC in the DOF within the first ten days of
+# the next month (CFF art. 20), usually on the 9th or 10th; Banco de México
+# publishes UDIS on the 10th and the 25th. Times are 9:17 in Mexico City.
+
+on:
+  schedule:
+    - cron: '17 15 8-13,24-27 * *'
+    - cron: '17 15 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Fetch new values from the DOF (fails and writes nothing on any inconsistency)
+        run: npm run data:update
+      - name: Did any value change?
+        id: diff
+        run: |
+          if git diff --quiet -- data/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Test and build with the new values
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          npm test
+          npm run build
+      - name: Commit data/ as github-actions[bot]
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "chore(data): $(cat .cache/data-summary.txt)"
+          git pull --rebase --autostash
+          git push
+      # Pushes made with GITHUB_TOKEN do not start other workflows, but a
+      # workflow_dispatch does.
+      - name: Redeploy GitHub Pages
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main
