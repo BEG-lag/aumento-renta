@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>aumento·renta: ¿Cuánto puede subir tu renta?</title>
+    <meta
+      name="description"
+      content="¿Cuánto puede subir tu renta? Actualiza una renta con el INPC del INEGI o con UDIS, ve la cuenta con los valores oficiales del DOF, revisa el tope de la Ciudad de México y manda el mensaje. Sin rastreo, funciona sin conexión."
+    />
+    <meta name="theme-color" content="#0a0c10" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="referrer" content="no-referrer" />
+    <meta property="og:title" content="aumento·renta: ¿Cuánto puede subir tu renta?" />
+    <meta property="og:description" content="Actualiza tu renta con el INPC o UDIS, con los valores oficiales y sus fuentes. Revisa el tope legal en la CDMX." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://beg-lag.github.io/aumento-renta/" />
+    <meta property="og:image" content="https://beg-lag.github.io/aumento-renta/icons/og.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  </head>
+  <body>
+    <header id="header-root"></header>
+    <main id="main" tabindex="-1">
+      <section id="hero-root" class="wrap hero"></section>
+      <div class="wrap layout">
+        <div id="form-root" class="col-form">
+          <noscript>
+            <p class="card">
+              Esta aplicación necesita JavaScript. Consulta el INPC en el
+              <a href="https://www.inegi.org.mx/temas/inpc/">INEGI</a>.
+            </p>
+          </noscript>
+        </div>
+        <div id="result-root" class="col-result"></div>
+      </div>
+      <p id="live" class="sr-only" aria-live="polite"></p>
+    </main>
+    <footer id="footer-root"></footer>
+    <script type="module" src="/src/app/main.ts"></script>
+  </body>
+</html>
