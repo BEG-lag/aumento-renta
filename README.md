@@ -145,7 +145,7 @@ npm run readme:sync   # regenerate the worked example in both READMEs
 npm run screenshots   # README screenshots + browser smoke checks (local Google Chrome; set CHROME_PATH)
 ```
 
-The tests include worked examples with real published values computed by hand, the DOF parsers against real notes in [`test/fixtures`](test/fixtures) (including the 2018 correction and five UDI table formats), date edge cases (February 29, months without the 31st, publication on the 8th or 9th), provisional results, the Mexico City rule, the message and the share link. The browser checks cover the worked example, keyboard use, labels, no horizontal scroll at 375 px, English, UDIS loading, the clipboard, the print view and offline use.
+91 Vitest tests, with 100% line coverage. They include worked examples with real published values computed by hand, the DOF parsers against real notes in [`test/fixtures`](test/fixtures) (including the 2018 correction and five UDI table formats), date edge cases (February 29, months without the 31st, publication on the 8th or 9th), provisional results, the Mexico City rule, the message and the share link. The browser checks cover the worked example, keyboard use, labels, no horizontal scroll at 375 px, English, UDIS loading, the clipboard, the print view and offline use.
 
 ```
 src/core/        exact arithmetic, dates, series, calculation, message, share link

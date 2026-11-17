@@ -145,7 +145,7 @@ npm run readme:sync   # regenera el ejemplo en los dos README
 npm run screenshots   # capturas del README + pruebas en navegador (Google Chrome local; usa CHROME_PATH)
 ```
 
-Las pruebas incluyen ejemplos resueltos a mano con valores publicados, los lectores del DOF contra notas reales en [`test/fixtures`](test/fixtures) (incluida la corrección de 2018 y cinco formatos de tabla de UDIS), casos límite de fechas (29 de febrero, meses sin día 31, publicación el 8 o el 9), resultados provisionales, la regla de la CDMX, el mensaje y el enlace. Las pruebas en navegador cubren el ejemplo resuelto, el uso con teclado, las etiquetas, que no haya desplazamiento horizontal a 375 px, el inglés, la carga de UDIS, el portapapeles, la vista de impresión y el uso sin conexión.
+91 pruebas de Vitest, con cobertura de 100% en líneas. Incluyen ejemplos resueltos a mano con valores publicados, los lectores del DOF contra notas reales en [`test/fixtures`](test/fixtures) (incluida la corrección de 2018 y cinco formatos de tabla de UDIS), casos límite de fechas (29 de febrero, meses sin día 31, publicación el 8 o el 9), resultados provisionales, la regla de la CDMX, el mensaje y el enlace. Las pruebas en navegador cubren el ejemplo resuelto, el uso con teclado, las etiquetas, que no haya desplazamiento horizontal a 375 px, el inglés, la carga de UDIS, el portapapeles, la vista de impresión y el uso sin conexión.
 
 ```
 src/core/        aritmética exacta, fechas, series, cálculo, mensaje, enlace
