@@ -5,6 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { calculate, parseAmount, parsePercent, percentText, referenceInflation, type UpdateInput, type UpdateResult } from '../src/core/calculate.ts';
+import { addMonths } from '../src/core/dates.ts';
 import { q } from '../src/core/rational.ts';
 import { series } from './helpers.ts';
 
@@ -103,12 +104,17 @@ describe('UDIS update', () => {
   });
 
   it('is provisional when the UDI of the increase date is not published yet', () => {
-    // UDIS are published to 2026-11-25: 8.932476 / 8.614745 -> $12,442.59
-    const r = run({ index: 'udis' });
+    const last = series.udis?.last ?? '';
+    const r = run({ index: 'udis', increaseDate: '2099-12-01' });
     expect(r.provisional).toBe(true);
-    expect(r.to.key).toBe('2026-11-25');
+    expect(r.to.key).toBe(last);
+    expect(r.notes).toContainEqual({ code: 'provisional-udis', wanted: '2099-12-01', used: last });
+  });
+
+  it('with the UDI of 2026-11-25 (published 10/11/2026): 8.932476 / 8.614745 on $12,000 is $12,442.59', () => {
+    const r = run({ index: 'udis', increaseDate: '2026-11-25' });
+    expect(r.provisional).toBe(false);
     expect(r.updated.formatted).toBe('$12,442.59');
-    expect(r.notes).toContainEqual({ code: 'provisional-udis', wanted: '2026-12-01', used: '2026-11-25' });
   });
 
   it('rejects dates before the first UDI (1995-04-04)', () => {
@@ -119,16 +125,17 @@ describe('UDIS update', () => {
 
 describe('provisional and edge cases', () => {
   it('a future increase uses the latest INPC and says when the right one is due', () => {
-    const r = run({ startDate: '2026-03-01', increaseDate: '2027-03-01' });
+    const last = series.inpc.last;
+    const r = run({ startDate: '2098-03-01', increaseDate: '2099-03-01' });
     expect(r.provisional).toBe(true);
-    expect([r.from.key, r.to.key]).toEqual(['2025-10', '2026-10']);
-    expect(r.notes).toContainEqual({ code: 'provisional-inpc', wanted: '2027-01', used: '2026-10', expected: '2027-02-10' });
+    expect([r.from.key, r.to.key]).toEqual([addMonths(last, -12), last]);
+    expect(r.notes).toContainEqual({ code: 'provisional-inpc', wanted: '2099-01', used: last, expected: '2099-02-10' });
   });
 
   it('calendar mode before December is published is provisional too', () => {
-    const r = run({ period: 'calendar', startDate: '2026-01-05', increaseDate: '2027-01-05' });
+    const r = run({ period: 'calendar', startDate: '2099-01-05', increaseDate: '2100-01-05' });
     expect(r.provisional).toBe(true);
-    expect(r.notes[0]).toMatchObject({ code: 'provisional-inpc', wanted: '2026-12' });
+    expect(r.notes[0]).toMatchObject({ code: 'provisional-inpc', wanted: '2099-12' });
   });
 
   it('notes when December was published after the increase date', () => {
@@ -157,7 +164,7 @@ describe('provisional and edge cases', () => {
     expect(errors({ period: 'cff', startDate: '2026-11-02', increaseDate: '2026-11-30' })).toEqual(['span']);
     expect(errors({ period: 'custom' })).toEqual(['custom-from', 'custom-to']);
     expect(errors({ period: 'custom', customFrom: '2026-05', customTo: '2026-05' })).toEqual(['custom-order']);
-    expect(errors({ period: 'custom', customFrom: '2026-05', customTo: '2027-05' })).toEqual(['not-published']);
+    expect(errors({ period: 'custom', customFrom: '2026-05', customTo: '2099-05' })).toEqual(['not-published']);
     expect(errors({ period: 'custom', customFrom: '2001-05', customTo: '2002-05' })).toEqual(['before-data']);
     expect(errors({ period: 'custom', customFrom: '2001-05', customTo: '2004-05' })).toEqual(['before-data']);
     expect(errors({ startDate: '2002-01-01' })).toEqual(['before-data']);
@@ -225,9 +232,9 @@ describe('proposal and the Mexico City cap (CCDF art. 2448 D)', () => {
   });
 
   it('says when the calendar-year inflation is not published yet', () => {
-    const { readings, pending } = referenceInflation(series.inpc, '2027-01-05');
-    expect(pending).toEqual([{ reading: 'calendar-year', year: 2026, month: '2026-12', expected: '2027-01-10' }]);
-    expect(readings.map((r) => [r.reading, r.to.key, r.provisional])).toEqual([['last-12', '2026-10', true]]);
+    const { readings, pending } = referenceInflation(series.inpc, '2100-01-05');
+    expect(pending).toEqual([{ reading: 'calendar-year', year: 2099, month: '2099-12', expected: '2100-01-10' }]);
+    expect(readings.map((r) => [r.reading, r.to.key, r.provisional])).toEqual([['last-12', series.inpc.last, true]]);
   });
 
   it('the update of the same 12 months is exactly at the reading-2 cap', () => {

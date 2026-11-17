@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { InpcSeries, UdisSeries, lastDayOf } from '../src/core/series.ts';
+import { addDays, addMonths, dayNumber, monthDiff } from '../src/core/dates.ts';
 import {
   dateLong,
   dateShort,
@@ -17,11 +18,13 @@ import { q } from '../src/core/rational.ts';
 import { inpcData, series, udisData } from './helpers.ts';
 
 describe('INPC series', () => {
-  it('covers January 2003 to October 2026 without gaps', () => {
+  it('covers January 2003 to at least October 2026, month by month without gaps', () => {
     expect(series.inpc.first).toBe('2003-01');
-    expect(series.inpc.last).toBe('2026-10');
-    expect(inpcData.months).toHaveLength(286);
-    expect(inpcData.months.filter((m) => m.source === 'dof')).toHaveLength(99);
+    expect(series.inpc.last >= '2026-10').toBe(true);
+    expect(inpcData.months).toHaveLength(monthDiff('2003-01', series.inpc.last) + 1);
+    inpcData.months.forEach((m, i) => expect(m.month).toBe(addMonths('2003-01', i)));
+    // Every month from August 2018 comes from its DOF publication.
+    for (const m of inpcData.months) expect(m.source === 'dof').toBe(m.month >= '2018-08');
   });
 
   it('knows when each month was published', () => {
@@ -42,7 +45,7 @@ describe('INPC series', () => {
     expect(series.inpc.latestPublishedBy('2026-05-08')).toBe('2026-04');
     expect(series.inpc.latestPublishedBy('2026-05-07')).toBe('2026-03');
     expect(series.inpc.latestPublishedBy('2026-12-01')).toBe('2026-10');
-    expect(series.inpc.latestPublishedBy('2027-03-01')).toBe('2027-01');
+    expect(series.inpc.latestPublishedBy('2099-03-01')).toBe('2099-01');
     expect(series.inpc.latestPublishedBy('2015-07-10')).toBe('2015-06');
   });
 
@@ -52,13 +55,15 @@ describe('INPC series', () => {
 });
 
 describe('UDIS series', () => {
-  it('has one value per day from 1995-04-04 to 2026-11-25', () => {
+  it('has one value per day from 1995-04-04 to at least 2026-11-25', () => {
     const udis = new UdisSeries(udisData);
     expect(udis.first).toBe('1995-04-04');
-    expect(udis.last).toBe('2026-11-25');
+    expect(udis.last >= '2026-11-25').toBe(true);
+    expect(udisData.values).toHaveLength(dayNumber(udis.last) - dayNumber(udis.first) + 1);
+    for (const v of udisData.values) expect(v).toMatch(/^\d{1,2}\.\d{6}$/);
     expect(udis.get('1995-04-04')?.value).toBe('1.000000');
     expect(udis.get('1995-04-03')).toBeUndefined();
-    expect(udis.get('2026-11-26')).toBeUndefined();
+    expect(udis.get(addDays(udis.last, 1))).toBeUndefined();
     // Settled with the DOF: SIDOF skipped 2004-07-25 and duplicated 2012-08-15.
     expect(udis.get('2004-07-25')?.value).toBe('3.417744');
     expect(udis.get('2012-08-15')?.value).toBe('4.780673');
@@ -81,6 +86,7 @@ describe('UDIS series', () => {
   it('rejects inconsistent data', () => {
     expect(() => new UdisSeries({ ...udisData, values: [] })).toThrow(RangeError);
     expect(() => new UdisSeries({ ...udisData, end: '2026-11-24' })).toThrow(RangeError);
+    expect(() => new UdisSeries({ ...udisData, end: addDays(udisData.end, 1) })).toThrow(RangeError);
   });
 
   it('last day of a month', () => {

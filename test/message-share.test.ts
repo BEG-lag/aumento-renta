@@ -44,27 +44,29 @@ describe('message', () => {
   });
 
   it('landlord, English, UDIS, provisional, no CDMX rule outside Mexico City', () => {
-    const text = buildMessage(result({ index: 'udis', location: 'other', proposal: { kind: 'percent', value: '3' } }), {
+    const text = buildMessage(result({ index: 'udis', increaseDate: '2099-12-01', location: 'other', proposal: { kind: 'percent', value: '3' } }), {
       lang: 'en',
       role: 'landlord',
       url: URL,
     });
     expect(text).toContain('Using the UDI value published by Banco de México');
-    expect(text).toContain('the updated rent is $12,442.59');
-    expect(text).toContain('This is provisional: the UDI value for December 1, 2026 is not published yet.');
+    expect(text).toMatch(/the updated rent is \$[\d,]+\.\d\d/);
+    expect(text).toContain('This is provisional: the UDI value for December 1, 2099 is not published yet.');
     expect(text).toContain('The rent I propose is $12,360.00, an increase of 3.00%');
     expect(text).not.toContain('2448 D');
     expect(text.endsWith('Happy to answer any questions. Best regards.')).toBe(true);
   });
 
   it('provisional INPC and lower rent', () => {
-    const es = buildMessage(result({ startDate: '2026-03-01', increaseDate: '2027-03-01', proposal: { kind: 'percent', value: '' } }), {
+    const es = buildMessage(result({ startDate: '2025-12-01', increaseDate: '2026-12-01', proposal: { kind: 'percent', value: '' } }), {
       lang: 'es',
       role: 'landlord',
       url: URL,
     });
-    expect(es).toContain('Es un cálculo provisional: el INPC de enero de 2027 se publica a más tardar el 10 de febrero de 2027.');
+    expect(es).not.toContain('provisional');
     expect(es).not.toContain('La renta que propongo');
+    const esProv = buildMessage(result({ startDate: '2098-03-01', increaseDate: '2099-03-01' }), { lang: 'es', role: 'tenant', url: URL });
+    expect(esProv).toContain('Es un cálculo provisional: el INPC de enero de 2099 se publica a más tardar el 10 de febrero de 2099.');
     expect(es).toContain('la renta actualizada queda en $12,450.33');
     const en = buildMessage(result({ period: 'custom', customFrom: '2026-04', customTo: '2026-06' }), { lang: 'en', role: 'tenant', url: URL });
     expect(en).toContain('less per month');
@@ -75,10 +77,10 @@ describe('message', () => {
       url: URL,
     });
     expect(es2).toContain('menos al mes');
-    const enProv = buildMessage(result({ startDate: '2026-03-01', increaseDate: '2027-03-01' }), { lang: 'en', role: 'tenant', url: URL });
-    expect(enProv).toContain('the INPC for January 2027 is due by February 10, 2027');
-    const esUdi = buildMessage(result({ index: 'udis' }), { lang: 'es', role: 'tenant', url: URL });
-    expect(esUdi).toContain('todavía no se publica el valor de la UDI del 1 de diciembre de 2026');
+    const enProv = buildMessage(result({ startDate: '2098-03-01', increaseDate: '2099-03-01' }), { lang: 'en', role: 'tenant', url: URL });
+    expect(enProv).toContain('the INPC for January 2099 is due by February 10, 2099');
+    const esUdi = buildMessage(result({ index: 'udis', increaseDate: '2099-12-01' }), { lang: 'es', role: 'tenant', url: URL });
+    expect(esUdi).toContain('todavía no se publica el valor de la UDI del 1 de diciembre de 2099');
     expect(esUdi).toContain('Con el valor de la UDI que publica el Banco de México');
   });
 

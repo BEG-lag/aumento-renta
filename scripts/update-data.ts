@@ -574,6 +574,11 @@ function finish(inpc: InpcData, udis: UdisData): void {
   const a = write(INPC_FILE, serializeInpc(inpc));
   const b = write(UDIS_FILE, serializeUdis(udis));
   log(a || b ? `written: ${[a ? 'data/inpc.json' : '', b ? 'data/udis.json' : ''].filter(Boolean).join(', ')}` : 'no changes');
+  // One line for the commit message of the scheduled workflow.
+  const summary = `INPC through ${inpc.months.at(-1)?.month ?? ''}, UDIS through ${udis.end}`;
+  mkdirSync(CACHE, { recursive: true });
+  writeFileSync(resolve(CACHE, 'data-summary.txt'), `${summary}\n`);
+  log(summary);
 }
 
 if (!parseDate(TODAY)) throw new Error(`TODAY must be YYYY-MM-DD, got ${TODAY}`);
