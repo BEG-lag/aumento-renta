@@ -138,9 +138,6 @@ async function main(): Promise<void> {
       check((await page.locator('a[href*="codigo=5803352"]').count()) > 0, 'links to the DOF note of October 2026');
       await smoke(page, 'desktop');
       await page.screenshot({ path: join(OUT, 'desktop.png') });
-      await page.locator('#cap-title').scrollIntoViewIfNeeded();
-      await page.locator('#steps-title').evaluate((el) => el.closest('section')?.scrollIntoView({ block: 'start' }));
-      await page.screenshot({ path: join(OUT, 'desktop-steps.png') });
 
       // Copy the message.
       await page.getByRole('button', { name: 'Copiar mensaje' }).click();
@@ -159,7 +156,11 @@ async function main(): Promise<void> {
     {
       const { context, page, errors } = await newContext(browser, url + EXAMPLE, { mobile: true });
       await smoke(page, 'mobile');
-      await page.screenshot({ path: join(OUT, 'mobile.png') });
+      check(await page.locator('.mobile-bar').isVisible(), 'the phone result bar is shown at the top of the page');
+      await page.locator('.mobile-bar').click();
+      await page.waitForTimeout(600);
+      check((await page.evaluate(() => document.activeElement?.id)) === 'result-title', 'the result bar moves focus to the result');
+      check(page.url().endsWith(EXAMPLE) && (await text(page, '#result-amount')) === '$12,450.33', 'the result bar keeps the inputs');
       await page.locator('#result-title').evaluate((el) => el.closest('section')?.scrollIntoView({ block: 'start' }));
       await page.evaluate(() => window.scrollBy(0, -12));
       await page.screenshot({ path: join(OUT, 'mobile-result.png') });
@@ -185,6 +186,7 @@ async function main(): Promise<void> {
       await page.keyboard.type('15000');
       check((await text(page, '#result-amount')).startsWith('$15,'), 'typing the rent shows the result');
       check((await page.evaluate(() => document.activeElement?.id)) === 'f-amount', 'focus stays in the field while typing');
+      check(page.url().includes('#m=15000&'), 'the skip link did not replace the inputs in the URL');
       check(await page.locator('.mobile-bar').isVisible(), 'the phone result bar shows the new rent while the form is on screen');
       await page.locator('#f-amount').fill('quince mil');
       check(await page.locator('#f-amount-error').isVisible(), 'an invalid rent shows an error');
@@ -217,10 +219,10 @@ async function main(): Promise<void> {
     {
       const { context, page } = await newContext(browser, url + EXAMPLE, { mobile: false });
       await page.emulateMedia({ media: 'print' });
-      await page.setViewportSize({ width: 820, height: 1100 });
+      await page.setViewportSize({ width: 820, height: 1160 });
       check(!(await page.locator('#form-root').isVisible()), 'print hides the form');
       check(await page.locator('.print-head').isVisible(), 'print shows the inputs used');
-      await page.screenshot({ path: join(OUT, 'print.png'), fullPage: true });
+      await page.screenshot({ path: join(OUT, 'print.png') });
       await context.close();
     }
 

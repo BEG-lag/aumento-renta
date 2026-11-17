@@ -323,8 +323,14 @@ main {
   padding-bottom: 32px;
 }
 
-main:focus {
+main:focus,
+[tabindex='-1']:focus {
   outline: none;
+}
+
+html {
+  scroll-padding-top: 12px;
+  scroll-padding-bottom: 84px;
 }
 
 .layout {

@@ -209,10 +209,27 @@ const handlers: Handlers = {
   },
 };
 
+// A pasted or edited share link: only fragments that carry inputs ("m=...")
+// change the state. In-page anchors are handled below without touching it.
 window.addEventListener('hashchange', () => {
+  if (!location.hash.includes('=') || location.hash === `#${encodeState(toInput(state))}`) return;
   const next = stateFromHash(location.hash, today, state.lang);
   state = { ...next, role: state.role };
   renderAll();
+});
+
+// The skip link and the phone result bar move focus without changing the
+// fragment, which holds the inputs.
+document.addEventListener('click', (event) => {
+  const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href^="#"]') : null;
+  const id = link?.getAttribute('href')?.slice(1);
+  if (!link || !id || id.includes('=')) return;
+  const target = document.getElementById(id);
+  if (!target) return;
+  event.preventDefault();
+  if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+  target.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  target.focus({ preventScroll: true });
 });
 
 if (state.index === 'udis') ensureUdis();
