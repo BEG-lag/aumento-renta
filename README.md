@@ -1,4 +1,8 @@
 <p align="center">
+  <a href="https://pivotek.mx"><img src="assets/pivotek-logo.svg" alt="PIVOTEK" width="200"></a>
+</p>
+
+<p align="center">
   <img src="assets/banner.svg" alt="aumento·renta: how much can your rent go up? INPC (INEGI), UDIS (Banxico) and Mexico City's legal cap. Example: $12,000 rent, INPC October 2025 to October 2026, new rent $12,450.33" width="100%">
 </p>
 

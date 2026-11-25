@@ -1,4 +1,8 @@
 <p align="center">
+  <a href="https://pivotek.mx"><img src="assets/pivotek-logo.svg" alt="PIVOTEK" width="200"></a>
+</p>
+
+<p align="center">
   <img src="assets/banner.svg" alt="aumento·renta: ¿cuánto puede subir tu renta? INPC (INEGI), UDIS (Banxico) y el tope legal de la CDMX. Ejemplo: renta de $12,000, INPC de octubre de 2025 a octubre de 2026, nueva renta de $12,450.33" width="100%">
 </p>
 
