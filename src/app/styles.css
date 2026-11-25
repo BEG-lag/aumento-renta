@@ -204,6 +204,48 @@ p {
   margin-right: 1px;
 }
 
+/* PIVOTEK logo next to the site name (orange on ink; the isotype on narrow screens). */
+.pvk {
+  display: flex;
+  align-items: center;
+  flex: none;
+  height: 22px;
+  margin-right: auto;
+  padding-left: 16px;
+  border-left: 1px solid var(--line);
+}
+
+.pvk:hover {
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+/* Optical nudge: the baseline of "pivotek" sits on the baseline of the site name. */
+.pvk img {
+  display: block;
+  transform: translateY(4px);
+}
+
+.pvk .pvk-iso {
+  display: none !important;
+  transform: translateY(6px);
+}
+
+@media (max-width: 459px) {
+  .pvk .pvk-logo {
+    display: none !important;
+  }
+
+  .pvk .pvk-iso {
+    display: block !important;
+  }
+
+  /* Below ~370px not even the isotype fits beside the language button: it drops to a second row. */
+  .top {
+    flex-wrap: wrap;
+  }
+}
+
 /* ---------- buttons ---------- */
 
 .btn {
