@@ -572,6 +572,13 @@ select:hover {
   grid-template-columns: 1fr 1fr;
 }
 
+/* Narrow phones: one option per row, so long words like "(residential)" stay inside the card. */
+@media (max-width: 419px) {
+  .choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .choice {
   position: relative;
   display: flex;
